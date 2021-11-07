@@ -15,6 +15,10 @@ const postSchema = new Schema({
         type: String,
         required: false,
         unique: true
+    },
+    votes: {
+        type: Number,
+        default: 1
     }
 }, {
     timestamps: true

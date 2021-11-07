@@ -20,6 +20,7 @@ exports.getProduct = async (req, res, next) => {
   const productId = req.params.productId;
   try {
     const product = await Product.findById(productId);
+    console.log(product.imageUrl);
     res.status(200).json({
       message: "Product fetched successufully",
       product: product,
@@ -31,5 +32,4 @@ exports.getProduct = async (req, res, next) => {
     }
   }
 };
-
 

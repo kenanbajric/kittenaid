@@ -7,6 +7,8 @@ const blogController = require('../controllers/blog');
 
 const router = express.Router();
 
-router.get('/feed', blogController.getPosts); 
+router.get('/posts', blogController.getPosts); 
+router.get('/post/:postId', blogController.getPost); 
+router.post('/post/:postId', blogController.upvotePost);
 
 module.exports = router;

@@ -41,5 +41,7 @@ router.post('/createproduct', isAuth, isAdmin, uploadFunction('images/product-im
 router.patch('/product/:productId', isAuth, uploadFunction('images/product-images').single('image'), isAdmin, adminController.updateProduct); 
 router.delete('/product/:productId', isAuth, isAdmin, adminController.deleteProduct); 
 router.post('/createpost', isAuth, isAdmin, uploadFunction('images/blog-images').single('image'), adminController.createPost); 
+router.patch('/post/:postId', isAuth, uploadFunction('images/blog-images').single('image'), isAdmin, adminController.updatePost); 
+router.delete('/post/:postId', isAuth, isAdmin, adminController.deletePost); 
 
 module.exports = router;

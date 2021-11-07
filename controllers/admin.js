@@ -67,7 +67,39 @@ exports.createProduct = async (req, res, next) => {
 }
 
 exports.updatePost = async (req, res, next) => {
-    // 
+    if (!req.file) {
+        const error = new Error('No image provided');
+        error.statusCode = 422;
+        next(error);
+        return;
+    }
+
+    const postId = req.params.postId;
+    const updatedTitle = req.body.title;
+    const updatedText = req.body.text;
+    const updatedImageUrl = req.file.path;
+
+    try {
+        const post = await Post.findById(postId);
+
+        await fs.unlink(post.imageUrl);
+        
+        post.title = updatedTitle;
+        post.text = updatedText;
+        post.imageUrl = updatedImageUrl;
+
+        await post.save();
+        res.status(201).json({
+            message: 'Post updated successufully',
+            post: post
+        });
+    } catch (err) {
+        if(!err.statusCode) {
+            err.statusCode = 500;
+            next(err);
+        }
+    }
+
 }
 
 exports.updateProduct = async (req, res, next) => {
@@ -87,13 +119,7 @@ exports.updateProduct = async (req, res, next) => {
     try {
         const product = await Product.findById(productId);
         
-        console.log(product.imageUrl);
-        
-        try {
-            await fs.unlink(product.imageUrl);
-        } catch {
-            // error handler
-        }
+        await fs.unlink(product.imageUrl);
 
         product.name = updatedName;
         product.description = updatedDescription;
@@ -115,9 +141,10 @@ exports.updateProduct = async (req, res, next) => {
 
 exports.deleteProduct = async (req, res, next) => {
     const productId = req.params.productId;
-    
     try {
+        const product = await Product.findById(productId);
         await Product.findByIdAndRemove(productId);
+        await fs.unlink(product.imageUrl);
         res.status(200).json({
             message: 'Product deleted successufully',
         });
@@ -130,5 +157,20 @@ exports.deleteProduct = async (req, res, next) => {
 }
 
 exports.deletePost = async (req, res, next) => {
-    // 
+    const postId = req.params.postId;
+    
+    try {
+        const post = await Post.findById(postId);
+        console.log(post.imageUrl);
+        await Post.findByIdAndRemove(postId);
+        await fs.unlink(post.imageUrl);
+        res.status(200).json({
+            message: 'Post deleted successufully',
+        });
+    } catch (err) {
+        if(!err.statusCode) {
+            err.statusCode = 500;
+            next(err);
+        }
+    }
 }
