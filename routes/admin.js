@@ -38,7 +38,7 @@ const uploadFunction = (dest) => {
 };
 
 router.post('/createproduct', isAuth, isAdmin, uploadFunction('images/product-images').single('image'), adminController.createProduct); 
-router.patch('/product/:productId', isAuth, isAdmin, adminController.updateProduct); 
+router.patch('/product/:productId', isAuth, uploadFunction('images/product-images').single('image'), isAdmin, adminController.updateProduct); 
 router.delete('/product/:productId', isAuth, isAdmin, adminController.deleteProduct); 
 router.post('/createpost', isAuth, isAdmin, uploadFunction('images/blog-images').single('image'), adminController.createPost); 
 

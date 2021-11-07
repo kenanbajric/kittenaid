@@ -1,6 +1,7 @@
 // my imports 
 const Product = require('../models/product');
 const Post = require("../models/blog-post");
+const fs = require('fs').promises;
 
 exports.createPost = async (req, res, next) => {
     if (!req.file) {
@@ -65,18 +66,39 @@ exports.createProduct = async (req, res, next) => {
     }
 }
 
-exports.updateProduct = async (req, res, next) => {
-    const productId = req.params.productId;
-    const name = req.body.name;
-    const price = req.body.price;
-    const description = req.body.description;
-    // photo
+exports.updatePost = async (req, res, next) => {
+    // 
+}
 
+exports.updateProduct = async (req, res, next) => {
+    if (!req.file) {
+        const error = new Error('No image provided');
+        error.statusCode = 422;
+        next(error);
+        return;
+    }
+    
+    const productId = req.params.productId;
+    const updatedName = req.body.name;
+    const updatedPrice = req.body.price;
+    const updatedDescription = req.body.description;
+    const updatedImageUrl = req.file.path;
+    
     try {
         const product = await Product.findById(productId);
-        product.name = name;
-        product.description = description;
-        product.price = price;
+        
+        console.log(product.imageUrl);
+        
+        try {
+            await fs.unlink(product.imageUrl);
+        } catch {
+            // error handler
+        }
+
+        product.name = updatedName;
+        product.description = updatedDescription;
+        product.price = updatedPrice;
+        product.imageUrl = updatedImageUrl;
 
         await product.save();
         res.status(201).json({
@@ -105,4 +127,8 @@ exports.deleteProduct = async (req, res, next) => {
             next(err);
         }
     }
+}
+
+exports.deletePost = async (req, res, next) => {
+    // 
 }
