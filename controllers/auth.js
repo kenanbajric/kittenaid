@@ -74,7 +74,7 @@ exports.updatePw = async (req, res, next) => {
         user.password = newHashedPw;
         await user.save();
         res.status(201).json({ message: 'Password updated!' })
-    } catch {
+    } catch (err) {
         if(!err.statusCode) {
             err.statusCode = 500;
             next(err);

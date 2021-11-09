@@ -1,5 +1,6 @@
 // my imports
 const Product = require("../models/product");
+const User = require("../models/user");
 
 exports.getProducts = async (req, res, next) => {
   try {
@@ -33,3 +34,34 @@ exports.getProduct = async (req, res, next) => {
   }
 };
 
+exports.addToCart = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.userId);
+    const product = await Product.findById(req.params.productId);
+
+    let newQuantity = 1;
+    
+    const index = user.cart.items.findIndex(currentProduct => currentProduct.productId.toString() === product._id.toString());
+
+    if (index >= 0) {
+      user.cart.items[index].quantity += 1;
+    } else {
+      const cartItem = {
+        productId: product,
+        quantity: newQuantity
+      }
+      user.cart.items.push(cartItem);
+    }
+
+    user.save();
+    res.status(200).json({
+      message: "Product added to cart successufully",
+      cart: user.cart,
+    });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+      next(err);
+    }
+  }
+}
