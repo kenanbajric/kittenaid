@@ -38,11 +38,8 @@ exports.addToCart = async (req, res, next) => {
   try {
     const user = await User.findById(req.userId);
     const product = await Product.findById(req.params.productId);
-
     let newQuantity = 1;
-    
     const index = user.cart.items.findIndex(currentProduct => currentProduct.productId.toString() === product._id.toString());
-
     if (index >= 0) {
       user.cart.items[index].quantity += 1;
     } else {
@@ -52,7 +49,6 @@ exports.addToCart = async (req, res, next) => {
       }
       user.cart.items.push(cartItem);
     }
-
     user.save();
     res.status(200).json({
       message: "Product added to cart successufully",
@@ -64,4 +60,22 @@ exports.addToCart = async (req, res, next) => {
       next(err);
     }
   }
+};
+
+exports.removeFromCart = async (req, res, next) => {
+  const user = await User.findById(req.userId);
+  const productId = req.params.productId;
+  const updatedCartItems = user.cart.items.filter(cartItem => {
+    return cartItem.productId.toString() !== productId.toString();
+  });
+  user.cart.items = updatedCartItems;
+  user.save();
+  res.status(200).json({
+    message: "Product removed from cart successufully",
+    cart: user.cart,
+  });
+}
+
+exports.deleteCart = async (req, res, next) => {
+  
 }

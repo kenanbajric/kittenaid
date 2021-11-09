@@ -9,6 +9,8 @@ const router = express.Router();
 
 router.get('/products', isAuth, shopController.getProducts); 
 router.get('/product/:productId', isAuth, shopController.getProduct); 
-router.post('/product/:productId', isAuth, shopController.addToCart); 
+router.post('/product/:productId', isAuth, shopController.addToCart);
+router.delete('/product/:productId', isAuth, shopController.removeFromCart); 
+router.delete('/cart', isAuth, shopController.deleteCart); 
 
 module.exports = router;
