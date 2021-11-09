@@ -20,6 +20,11 @@ const userSchema = new Schema({
         type: Boolean,
         default: false
     },
+    imageUrl: {
+        type: String,
+        required: false,
+        unique: true
+    },
     cart: {
         items: [
             {

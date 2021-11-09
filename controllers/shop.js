@@ -77,5 +77,14 @@ exports.removeFromCart = async (req, res, next) => {
 }
 
 exports.deleteCart = async (req, res, next) => {
-  
+  const user = await User.findById(req.userId);
+  user.cart.items = [];
+  res.status(200).json({
+    message: "Cart emptied successufully",
+    cart: user.cart,
+  });
+}
+
+exports.postOrder = async (req, res, next) => {
+  // implement Stripe payment
 }
