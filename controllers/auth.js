@@ -58,6 +58,10 @@ exports.login = async (req, res, next) => {
     }
 }
 
+exports.updateProfile = async (req, res, next) => {
+    // update user profile..
+}
+
 exports.resetPw = async (req, res, next) => {
     // send auth token to mail, and then approve it to change password
 }
