@@ -20,9 +20,9 @@ const productSchema = new Schema({
         required: true,
         unique: true
     },
-    categories: {
-        type: Array,
-        required: true
+    category: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
     }
 }, {
     timestamps: true

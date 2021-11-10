@@ -3,6 +3,7 @@ const Product = require("../models/product");
 const User = require("../models/user");
 
 exports.getProducts = async (req, res, next) => {
+  // napraviti paginaciju i sortiranje
   try {
     const products = await Product.find();
     res.status(201).json({

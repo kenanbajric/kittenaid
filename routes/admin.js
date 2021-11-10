@@ -16,6 +16,7 @@ router.post('/createpost', isAuth, isAdmin, uploadFunction('images/blog-images')
 router.patch('/post/:postId', isAuth, uploadFunction('images/blog-images').single('image'), isAdmin, adminController.updatePost); 
 router.delete('/post/:postId', isAuth, isAdmin, adminController.deletePost); 
 router.post('/category', isAuth, isAdmin, adminController.createCategory); 
+router.get('/category', isAuth, isAdmin, adminController.category); 
 router.delete('/category/:categoryId', isAuth, isAdmin, adminController.deleteCategory); 
 router.patch('/category/:categoryId', isAuth, isAdmin, adminController.updateCategory); 
 

@@ -46,13 +46,13 @@ exports.createProduct = async (req, res, next) => {
     const price = req.body.price;
     const description = req.body.description;
     const imageUrl = req.file.path;
-    const categories = req.body.categories;
+    const categoryId = req.body.categoryId;
     const product = new Product({
         name: name,
         description: description,
         price: price,
         imageUrl: imageUrl,
-        categories: categories
+        category: categoryId
     });
     try {
         await product.save();
@@ -101,6 +101,7 @@ exports.updatePost = async (req, res, next) => {
 }
 
 exports.updateProduct = async (req, res, next) => {
+    // ako neki dio ne treba update-ati, onda zadrzati data i image od ranije ..
     if (!req.file) {
         const error = new Error('No image provided');
         error.statusCode = 422;
@@ -112,7 +113,7 @@ exports.updateProduct = async (req, res, next) => {
     const updatedPrice = req.body.price;
     const updatedDescription = req.body.description;
     const updatedImageUrl = req.file.path;
-    
+    const updatedCategoryId = req.body.categoryId;
     try {
         const product = await Product.findById(productId);
         await fs.unlink(product.imageUrl);
@@ -120,6 +121,7 @@ exports.updateProduct = async (req, res, next) => {
         product.description = updatedDescription;
         product.price = updatedPrice;
         product.imageUrl = updatedImageUrl;
+        product.category = updatedCategoryId;
         await product.save();
         res.status(201).json({
             message: 'Product updated successufully',
@@ -222,4 +224,19 @@ exports.updateCategory = async (req, res, next) => {
             next(err);
         }
     }
+}
+
+exports.category = async (req, res, next) => {
+    try {
+        const categories = await Category.find();
+        res.status(201).json({
+          message: "Categories fetched successufully",
+          categories: categories,
+        });
+      } catch (err) {
+        if (!err.statusCode) {
+          err.statusCode = 500;
+          next(err);
+        }
+      }
 }
