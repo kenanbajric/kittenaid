@@ -2,12 +2,15 @@
 const express = require('express');
 
 // my imports
-const isAuth = require('../middleware/is-auth');
 const blogController = require('../controllers/blog');
+const pagination = require('../middleware/pagination-function');
+
+// models 
+const Post = require('../models/blog-post');
 
 const router = express.Router();
 
-router.get('/posts', blogController.getPosts); 
+router.get('/posts', pagination(Post), blogController.getPosts);  // testirati paginaciju
 router.get('/post/:postId', blogController.getPost); 
 router.post('/post/:postId', blogController.upvotePost);
 

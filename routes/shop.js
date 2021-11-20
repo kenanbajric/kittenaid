@@ -4,10 +4,14 @@ const express = require('express');
 // my imports
 const isAuth = require('../middleware/is-auth');
 const shopController = require('../controllers/shop');
+const pagination = require('../middleware/pagination-function');
+
+// models 
+const Product = require('../models/product');
 
 const router = express.Router();
 
-router.get('/products', isAuth, shopController.getProducts); 
+router.get('/products', isAuth, pagination(Product), shopController.getProducts); 
 router.get('/product/:productId', isAuth, shopController.getProduct); 
 router.post('/product/:productId', isAuth, shopController.addToCart);
 router.delete('/product/:productId', isAuth, shopController.removeFromCart); 
