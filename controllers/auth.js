@@ -35,7 +35,9 @@ exports.login = async (req, res, next) => {
     try {
         const user = await User.findOne({email: email});
         if (!user) {
-            //error handler
+            const error = new Error('User not found.');
+            error.statusCode = 404;
+            throw next(error);
         }
         const isEqual = await bcrypt.compare(password, user.password);
         if(!isEqual) {
@@ -50,7 +52,7 @@ exports.login = async (req, res, next) => {
         'secret0secret1secret2secret3',
         { expiresIn: '5h' });
         res.status(200).json({ message: 'Login succeded', token: token });
-    } catch {
+    } catch (err) {
         if(!err.statusCode) {
             err.statusCode = 500;
             next(err);

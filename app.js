@@ -1,8 +1,10 @@
+// .env imports
+const { db_uri, port } = require('./env/config');
+
 // core imports
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
-// const multer = require('multer');
 
 // my imports
 const authRoutes = require('./routes/auth');
@@ -45,8 +47,8 @@ app.use((error, req, res, next) => {
 
 // spinning up a server with database connection
 mongoose
-    .connect('mongodb+srv://johnny:1234@cluster0.awjuf.mongodb.net/kittenaid?retryWrites=true&w=majority')
+    .connect(db_uri)
     .then(result => {
-        app.listen(3000);
+        app.listen(port);
     })
     .catch(err => console.log(err));
