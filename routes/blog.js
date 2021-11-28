@@ -4,14 +4,16 @@ const express = require('express');
 // my imports
 const blogController = require('../controllers/blog');
 const pagination = require('../middleware/pagination-function');
+const isAuth = require('../middleware/is-auth');
 
 // models 
 const Post = require('../models/blog-post');
 
 const router = express.Router();
 
-router.get('/posts', pagination(Post), blogController.getPosts);  // testirati paginaciju
-router.get('/post/:postId', blogController.getPost); 
-router.post('/post/:postId', blogController.upvotePost);
+router.get('/', pagination(Post), blogController.getPosts);  // testirati paginaciju
+router.get('/:postId', blogController.getPost); 
+router.post('/:postId', blogController.upvotePost);
+router.post('/:postId/comments', isAuth, blogController.postComment);
 
 module.exports = router;

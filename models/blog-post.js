@@ -19,7 +19,13 @@ const postSchema = new Schema({
     votes: {
         type: Number,
         default: 1
-    }
+    },
+    comments: [
+        {
+            comment: {type: String},
+            userId: {type: Schema.Types.ObjectId, ref: 'User', required: true},
+        }
+    ]
 }, {
     timestamps: true
 })

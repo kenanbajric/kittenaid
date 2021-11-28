@@ -34,7 +34,7 @@ app.use('/auth', authRoutes);
 app.use('/feed', aidReqFeed);
 app.use('/admin', adminRoutes);
 app.use('/shop', shopRoutes);
-app.use('/blog', blogRoutes);
+app.use('/posts', blogRoutes);
 
 //error handling middleware
 app.use((error, req, res, next) => {

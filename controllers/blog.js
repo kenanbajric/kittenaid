@@ -16,10 +16,10 @@ exports.getPosts = async (req, res, next) => {
 }
 
 exports.getPost = async (req, res, next) => {
-    const productId = req.params.productId;
-    
+    const postId = req.params.postId;
     try {
-        const post = await Post.findById(productId);
+        const post = await Post.findById(postId);
+        console.log(post);
         res.status(201).json({
             message: "Post fetched successufully",
             post: post,
@@ -42,6 +42,32 @@ exports.upvotePost = async (req, res, next) => {
             message: "Vote registered successufully",
             post: post,
           });
+    } catch (err) {
+        if(!err.statusCode) {
+            err.statusCode = 500;
+            next(err);
+        }
+    }
+}
+
+exports.postComment = async (req, res, next) => {
+    const postId = req.params.postId;
+    const userId = req.userId;
+    const commentText = req.body.comment;
+
+    const comment = {
+        userId: userId,
+        comment: commentText
+    }
+
+    try {
+        const post = await Post.findById(postId);
+        post.comments.push(comment);
+        post.save();
+        res.status(201).json({
+            message: "Comment added successufully",
+            post: post
+        })
     } catch (err) {
         if(!err.statusCode) {
             err.statusCode = 500;

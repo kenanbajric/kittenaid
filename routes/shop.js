@@ -12,9 +12,9 @@ const Product = require('../models/product');
 const router = express.Router();
 
 router.get('/products', isAuth, pagination(Product), shopController.getProducts); 
-router.get('/product/:productId', isAuth, shopController.getProduct); 
-router.post('/product/:productId', isAuth, shopController.addToCart);
-router.delete('/product/:productId', isAuth, shopController.removeFromCart); 
+router.get('/products/:productId', isAuth, shopController.getProduct); 
+router.post('/products/:productId', isAuth, shopController.addToCart);
+router.delete('/products/:productId', isAuth, shopController.removeFromCart); 
 router.delete('/cart', isAuth, shopController.deleteCart); 
 router.post('/order', isAuth, shopController.postOrder); // treba zavrsiti 
 
