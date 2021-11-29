@@ -75,3 +75,7 @@ exports.postComment = async (req, res, next) => {
         }
     }
 }
+
+exports.category = async (req, res, next) => {
+    
+}

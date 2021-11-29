@@ -1,5 +1,3 @@
-
-
 module.exports = (model) => {
     return async (req, res, next) => {
         const page = parseInt(req.query.page);

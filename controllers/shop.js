@@ -87,3 +87,17 @@ exports.deleteCart = async (req, res, next) => {
 exports.postOrder = async (req, res, next) => {
   // implement Stripe payment
 }
+
+exports.category = async (req, res, next) => {
+  try {
+    res.status(202).json({
+      message: "Category products fetched successufully",
+      products: req.categoryItems
+    });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+      next(err);
+    }
+  }
+}
