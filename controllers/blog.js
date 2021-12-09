@@ -77,5 +77,16 @@ exports.postComment = async (req, res, next) => {
 }
 
 exports.category = async (req, res, next) => {
-    
+    // to be tested..
+    try {
+        res.status(202).json({
+          message: "Category posts fetched successufully",
+          products: req.paginationResult
+        });
+      } catch (err) {
+        if (!err.statusCode) {
+          err.statusCode = 500;
+          next(err);
+        }
+      }
 }

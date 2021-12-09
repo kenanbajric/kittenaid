@@ -1,13 +1,21 @@
 module.exports = (model) => {
     return async (req, res, next) => {
-        const page = parseInt(req.query.page);
-        const limit = parseInt(req.query.limit);
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
         const startIndex = (page - 1) * limit;
         const endIndex = page * limit;
         const sortBy = req.query.sortby;
         let orderBy = req.query.orderby; // could be 'asc' or 'desc'
+        
+        // filter category
+        let where = {};
+        const categoryId = req.query.categoryId;
+        if (categoryId) {
+            where = {category: categoryId}
+        }
+        
         let results = {};
-
+        
         try {
             // sorting
             if (orderBy === 'asc') {
@@ -17,7 +25,7 @@ module.exports = (model) => {
             } else {
                 console.log('No sorting');
             }
-
+            
             // pagination
             if (endIndex < await model.count()) {
                 results.next = {
@@ -35,7 +43,7 @@ module.exports = (model) => {
             // query
             if (sortBy) {
                 // query for sorting by given params
-                results.products = await model.find().sort({[sortBy]: orderBy}).skip(startIndex).limit(limit);
+                results.products = await model.find(where).sort({[sortBy]: orderBy}).skip(startIndex).limit(limit);
             } else {
                 // query with default sorting
                 results.products = await model.find().skip(startIndex).limit(limit);

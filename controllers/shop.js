@@ -92,7 +92,7 @@ exports.category = async (req, res, next) => {
   try {
     res.status(202).json({
       message: "Category products fetched successufully",
-      products: req.categoryItems
+      products: req.paginationResult
     });
   } catch (err) {
     if (!err.statusCode) {

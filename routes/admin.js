@@ -9,10 +9,10 @@ const uploadFunction = require('../middleware/upload-function');
 
 const router = express.Router();
 
-router.post('/createproduct', isAuth, isAdmin, uploadFunction('images/product-images').single('image'), adminController.createProduct); 
+router.post('/product', isAuth, isAdmin, uploadFunction('images/product-images').single('image'), adminController.createProduct); 
 router.patch('/product/:productId', isAuth, uploadFunction('images/product-images').single('image'), isAdmin, adminController.updateProduct); 
 router.delete('/product/:productId', isAuth, isAdmin, adminController.deleteProduct); 
-router.post('/createpost', isAuth, isAdmin, uploadFunction('images/blog-images').single('image'), adminController.createPost); 
+router.post('/post', isAuth, isAdmin, uploadFunction('images/blog-images').single('image'), adminController.createPost); 
 router.patch('/post/:postId', isAuth, uploadFunction('images/blog-images').single('image'), isAdmin, adminController.updatePost); 
 router.delete('/post/:postId', isAuth, isAdmin, adminController.deletePost); 
 router.post('/category', isAuth, isAdmin, adminController.createCategory); 

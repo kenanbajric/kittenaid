@@ -11,5 +11,6 @@ const router = express.Router();
 router.post('/signup', uploadFunction('images/avatar-images').single('image'), authController.signup);
 router.post('/login', authController.login);
 router.post('/updatepw', isAuth, authController.updatePw);
+router.post('resetpw', authController.resetPw);
 
 module.exports = router;

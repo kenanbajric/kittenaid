@@ -3,7 +3,6 @@ const express = require('express');
 
 // my imports
 const isAuth = require('../middleware/is-auth');
-const findCategory = require('../middleware/find-category');
 const shopController = require('../controllers/shop');
 const pagination = require('../middleware/pagination-function');
 
@@ -12,8 +11,7 @@ const Product = require('../models/product');
 
 const router = express.Router();
 
-router.get('/products', isAuth, pagination(Product), shopController.getProducts); 
-router.get('/:categoryId', findCategory(Product), shopController.category)
+router.get('/products', pagination(Product), shopController.getProducts); 
 router.get('/products/:productId', isAuth, shopController.getProduct); 
 router.post('/products/:productId', isAuth, shopController.addToCart);
 router.delete('/products/:productId', isAuth, shopController.removeFromCart); 

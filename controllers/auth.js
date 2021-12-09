@@ -1,9 +1,18 @@
 // core imports
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
+const sendgridTransport = require('nodemailer-sendgrid-transport');
 
 // my imports 
 const User = require('../models/user.js');
+const { sendgrid_key, jwt_string } = require('../env/config');
+
+const transporter = nodemailer.createTransport(sendgridTransport({
+    auth: {
+        api_key: sendgrid_key 
+    }
+}))
 
 exports.signup = async (req, res, next) => {
     const email = req.body.email;
@@ -19,9 +28,16 @@ exports.signup = async (req, res, next) => {
             name: name,
             imageUrl: imageUrl
         });
+        await transporter.sendMail({
+            to: email,
+            from: 'kenan.bajric93@gmail.com',
+            subject: 'Signup succeeded',
+            html: '<h1>You successfully signed up for Kittenaid account!</h1>'
+        });
+        console.log('Mail sent successfully to ' + email);
         const result = await user.save();
         res.status(200).json({ message: 'User created.', userId: result._id })
-    } catch {
+    } catch (err) {
         if(!err.statusCode) {
             err.statusCode = 500;
             next(err);
@@ -49,7 +65,7 @@ exports.login = async (req, res, next) => {
             email: user.email,
             userId: user._id.toString()
         },
-        'secret0secret1secret2secret3',
+        jwt_string,
         { expiresIn: '5h' });
         res.status(200).json({ message: 'Login succeded', token: token });
     } catch (err) {
